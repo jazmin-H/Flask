@@ -44,6 +44,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        v_password = request.form['v_password']
         db = get_db()
         error = None
         user = db.execute(
@@ -54,6 +55,9 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
+
+       ## elif password != v_password :
+          ##  error = 'incorrecto v_password'
 
         if error is None:
             session.clear()
