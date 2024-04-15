@@ -14,14 +14,24 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        Email = request.form['Email']
         password = request.form['password']
+        re_password = request.form['verificar']
+
         db = get_db()
         error = None
 
         if not username:
             error = 'Username is required.'
+        elif not Email:
+            error = 'Email is required.'     
         elif not password:
-            error = 'Password is required.'
+            error = 'Password is required.'     
+        elif not re_password:
+            error = 're_Password is required.'
+        elif password != re_password :
+            error = 'incorrecto v_password'
+            
 
         if error is None:
             try:
@@ -44,7 +54,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        v_password = request.form['v_password']
+
         db = get_db()
         error = None
         user = db.execute(
@@ -55,9 +65,6 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
-
-       ## elif password != v_password :
-          ##  error = 'incorrecto v_password'
 
         if error is None:
             session.clear()
